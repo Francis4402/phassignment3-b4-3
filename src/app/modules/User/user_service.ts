@@ -11,7 +11,7 @@ const createUserIntoDB = async (payload: Partial<TUser>): Promise<TUser> => {
     const result = await User.create(payload);
   
     return result;
-  };
+};
 
 
 export const UserServices = {

@@ -12,7 +12,7 @@ const createBlogIntoDB = async (payload: TBlogs) => {
 
 const getAllBlogsFromDB = async () => {
     try {
-        const result = await Blog.find({});
+        const result = await Blog.find();
     
         return result;
     } catch (error) {

@@ -1,27 +1,40 @@
+import config from "../../config";
 import { httpStatus } from "../../config/status";
 import AppError from "../../errors/AppError";
+import { TUser } from "../User/user_interface";
 import { User } from "../User/user_model";
-import { TLoginUser, TRegisterUser } from "./auth_interface";
+import jwt from 'jsonwebtoken';
 
-
-const loginUser = async (payload: TLoginUser) => {
+const loginUser = async (payload: TUser) => {
     
-    const isUserExists = await User.findOne({ id: payload?.email });
-    
-    console.log(isUserExists);
+    const user = await User.isUserExistsByCustomId(payload.email);
 
-    if (!isUserExists) {
+    if (!user) {
         throw new AppError(httpStatus.NOT_FOUND, 'This user not found!');
     }
+    
+    if (payload?.isBlocked === true) {
+        throw new AppError(httpStatus.NOT_FOUND, 'This user is blocked!');
+    }
 
-    return {};
-}
+    if(! await User.isPasswordMatched(payload?.password, user?.password))
+        throw new AppError(httpStatus.FORBIDDEN, 'Password do not matched!');
 
-const registerUser = async (payload: TRegisterUser) => {
-    console.log(payload);
-    return {};
+    const jwtPayload = {
+        userId: user,
+        role: user.role,
+    };
+
+    const accessToken = jwt.sign(
+        jwtPayload, config.jwt_secret as string,
+        {expiresIn: '10d'}
+    );
+
+    return {
+        accessToken,
+    };
 }
 
 export const AuthServices = {
-    loginUser, registerUser
+    loginUser
 }
