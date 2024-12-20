@@ -11,33 +11,47 @@ const createBlogIntoDB = async (payload: TBlogs) => {
 }
 
 const getAllBlogsFromDB = async () => {
-    const result = await Blog.find({});
+    try {
+        const result = await Blog.find({});
     
-    return result;
+        return result;
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 const getSingleBlogFromDB = async (id: string) => {
-    const result = await Blog.findOne({id});
+    try {
+        const result = await Blog.findOne({id});
     
-    return result;
+        return result;
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 const updateBlogIntoDB = async (id: string, payload: Partial<TBlogs>) => {
+    try {
+        const objectId = new Types.ObjectId(id);
 
-    const objectId = new Types.ObjectId(id);
-
-    const result = await Blog.updateOne({_id: objectId}, {$set: payload});
-    
-    return result;
+        const result = await Blog.updateOne({_id: objectId}, {$set: payload});
+        
+        return result;
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 const deleteBlogIntoDB = async (id: string) => {
+    try {
+        const objectId = new Types.ObjectId(id);
 
-    const objectId = new Types.ObjectId(id);
+        const result = await Blog.deleteOne({_id: objectId });
 
-    const result = await Blog.deleteOne({_id: objectId });
-
-    return result;
+        return result;
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 export const blogServices = {
