@@ -3,15 +3,16 @@ import validateRequest from '../../middlewares/validateRequest';
 import { BlogValidation } from './blog_validation';
 import { BlogController } from './blog_controller';
 import auth from '../../middlewares/auth';
+import { USER_ROLE } from '../User/user.constant';
 
 const router = express.Router();
 
-router.post('/', validateRequest(BlogValidation.blogValidationSchema), BlogController.createBlogs);
+router.post('/', auth(USER_ROLE.user && USER_ROLE.admin), validateRequest(BlogValidation.blogValidationSchema), BlogController.createBlogs);
 
-router.get('/', auth(), validateRequest(BlogValidation.blogValidationSchema), BlogController.getAllBlogs);
+router.get('/', auth(USER_ROLE.user && USER_ROLE.admin), validateRequest(BlogValidation.blogValidationSchema), BlogController.getAllBlogs);
 
-router.patch('/:id', validateRequest(BlogValidation.blogValidationSchema), BlogController.updateBlog);
+router.patch('/:id', auth(USER_ROLE.admin), validateRequest(BlogValidation.blogValidationSchema), BlogController.updateBlog);
 
-router.delete('/:id', validateRequest(BlogValidation.blogValidationSchema), BlogController.deleteBlog);
+router.delete('/:id', auth(USER_ROLE.user && USER_ROLE.admin), validateRequest(BlogValidation.blogValidationSchema), BlogController.deleteBlog);
 
 export const BlogRoutes = router;

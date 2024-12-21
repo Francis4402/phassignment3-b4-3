@@ -21,7 +21,7 @@ const loginUser = async (payload: TUser) => {
         throw new AppError(httpStatus.FORBIDDEN, 'Password do not matched!');
 
     const jwtPayload = {
-        userId: user,
+        useremail: user.email,
         role: user.role,
     };
 

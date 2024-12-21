@@ -10,6 +10,15 @@ const BlogSchema = new Schema<TBlogs>({
     content: {
         type: String,
         required: true,
+    },
+    author: {
+        type: Schema.Types.ObjectId,
+        required: true,
+        ref: 'User'
+    },
+    isPublished: {
+        type: Boolean,
+        default: true,
     }
 }, {
     timestamps: true,
