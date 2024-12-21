@@ -39,7 +39,7 @@ In this project you can login and register as user or admin. User can post blog,
 
 ## Api Routes
 
-### For the books post and get data
+### For the blog post and get data
 
 ```bash
 /api/blogs
