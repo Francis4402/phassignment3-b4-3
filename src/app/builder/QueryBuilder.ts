@@ -1,66 +1,57 @@
-import { FilterQuery, Query } from 'mongoose';
+import { FilterQuery, Query, Document } from 'mongoose';
 
-class QueryBuilder<T> {
+interface QueryParams {
+  search?: string;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+  limit?: number;
+  page?: number;
+  [key: string]: any; // Allow any additional query params for filtering
+}
+
+class QueryBuilder<T extends Document> {
   public modelQuery: Query<T[], T>;
-  public query: Record<string, unknown>;
+  public query: QueryParams;
 
-  constructor(modelQuery: Query<T[], T>, query: Record<string, unknown>) {
+  constructor(modelQuery: Query<T[], T>, query: QueryParams) {
     this.modelQuery = modelQuery;
     this.query = query;
   }
 
+  // Search functionality: Searches over specified fields
   search(searchableFields: string[]) {
-    const search = this?.query?.search;
+    const search = this.query.search;
     if (search) {
-      this.modelQuery = this.modelQuery.find({
-        $or: searchableFields.map(
-          (field) =>
-            ({
-              [field]: { $regex: search, $options: 'i' },
-            }) as FilterQuery<T>,
-        ),
-      });
+      const searchConditions = searchableFields.map((field) => ({
+        [field]: { $regex: search, $options: 'i' },
+      }));
+      this.modelQuery = this.modelQuery.find({ $or: searchConditions });
     }
 
     return this;
   }
 
+  // Filter functionality: Applies additional filters (e.g., author=authorId)
   filter() {
-    const queryObj = { ...this.query }; // copy
+    const queryObj: Record<string, any> = { ...this.query }; // copy
 
-    // Filtering
-    const excludeFields = ['search', 'sort', 'limit', 'page', 'fields'];
-
+    // Filtering: Exclude special query parameters like search, sort, limit, etc.
+    const excludeFields = ['search', 'sortBy', 'sortOrder', 'limit', 'page'];
     excludeFields.forEach((el) => delete queryObj[el]);
 
-    this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>);
+    if (Object.keys(queryObj).length > 0) {
+      this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>);
+    }
 
     return this;
   }
 
+  // Sorting functionality: Sorts the results based on sortBy and sortOrder
   sort() {
-    const sort =
-      (this?.query?.sort as string)?.split(',')?.join(' ') || '-createdAt';
-    this.modelQuery = this.modelQuery.sort(sort as string);
+    const sortBy = this.query.sortBy || 'createdAt';
+    const sortOrder = this.query.sortOrder === 'asc' ? 1 : -1;
+    this.modelQuery = this.modelQuery.sort({ [sortBy]: sortOrder });
 
-    return this;
-  }
-
-  paginate() {
-    const page = Number(this?.query?.page) || 1;
-    const limit = Number(this?.query?.limit) || 10;
-    const skip = (page - 1) * limit;
-
-    this.modelQuery = this.modelQuery.skip(skip).limit(limit);
-
-    return this;
-  }
-
-  fields() {
-    const fields =
-      (this?.query?.fields as string)?.split(',')?.join(' ') || '-__v';
-
-    this.modelQuery = this.modelQuery.select(fields);
     return this;
   }
 }

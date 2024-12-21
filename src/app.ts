@@ -13,7 +13,7 @@ app.use(cors());
 app.use('/api', router);
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World");
+  res.send("<h3>Batch: Ph Hero Level 2 - batch 4 (WEB8-1601)</h3><h2>Assignment 3</h2><h3>Project: Blog Project</h3>");
 });
 
 

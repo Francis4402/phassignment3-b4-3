@@ -1,4 +1,3 @@
-import { Types } from "mongoose";
 import config from "../../config";
 import { TUser } from "./user_interface";
 import { User } from "./user_model"
@@ -14,12 +13,7 @@ const createUserIntoDB = async (payload: Partial<TUser>): Promise<TUser> => {
     return result;
 };
 
-const findUserById = async (userId: Types.ObjectId) => {
-    const user = await User.findById(userId);
-    return user;
-};
-
 
 export const UserServices = {
-    createUserIntoDB, findUserById
+    createUserIntoDB
 }

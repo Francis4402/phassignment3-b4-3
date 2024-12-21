@@ -19,7 +19,7 @@ const createUser = catchAsync(async (req, res) => {
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Admin is created succesfully',
+      message: 'user is created succesfully',
       data: result,
     });
   });

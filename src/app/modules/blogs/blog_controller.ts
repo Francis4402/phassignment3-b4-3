@@ -5,10 +5,10 @@ import { blogServices } from "./blog_services";
 
 
 const createBlogs = catchAsync(async (req, res) => {
-    const {title, content} = req.body;
+    const {title, content, isPublished} = req.body;
 
     const payload = {
-        title, content
+        title, content, author: req.user._id, isPublished
     };
 
     const result = await blogServices.createBlogIntoDB(payload);

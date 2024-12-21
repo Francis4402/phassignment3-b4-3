@@ -1,9 +1,19 @@
 import { Types } from "mongoose";
 import { TBlogs } from "./blog_interface";
 import { Blog } from "./blog_model";
+import QueryBuilder from "../../builder/QueryBuilder";
 
 
 const createBlogIntoDB = async (payload: TBlogs) => {
+    
+    const queryParams = new URLSearchParams();
+    const queryBuilder = new QueryBuilder(Blog.find(), queryParams);
+
+    queryBuilder.search(['title', 'content']);
+    
+    queryBuilder.filter();
+    
+    queryBuilder.sort();
     
     const result = await Blog.create(payload);
     
