@@ -2,33 +2,31 @@ import { Types } from "mongoose";
 import { TBlogs } from "./blog_interface";
 import { Blog } from "./blog_model";
 import QueryBuilder from "../../builder/QueryBuilder";
+import { QueryParams } from "../../builder/QueryInterface";
 
 
 const createBlogIntoDB = async (payload: TBlogs) => {
     
-    const queryParams = new URLSearchParams();
-    const queryBuilder = new QueryBuilder(Blog.find(), queryParams);
-
-    queryBuilder.search(['title', 'content']);
-    
-    queryBuilder.filter();
-    
-    queryBuilder.sort();
+    payload.author = new Types.ObjectId(payload.author);
     
     const result = await Blog.create(payload);
     
     return result;
 }
 
-const getAllBlogsFromDB = async () => {
-    try {
-        const result = await Blog.find();
-    
-        return result;
-    } catch (error) {
-        console.log(error);
-    }
-}
+const getAllBlogsFromDB = async (queryParams: QueryParams) => {
+    const queryBuilder = new QueryBuilder(Blog.find(), queryParams);
+
+  const result = await queryBuilder
+    .search(['title', 'content'])
+    .filter()
+    .sort()
+    .build()
+    .exec();
+
+  return result;
+};
+
 
 const getSingleBlogFromDB = async (id: string) => {
     try {

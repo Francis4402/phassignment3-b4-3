@@ -13,7 +13,12 @@ const createUserIntoDB = async (payload: Partial<TUser>): Promise<TUser> => {
     return result;
 };
 
+const getUsersFromDB = async () => {
+    const result = await User.find();
+    return result;
+}
+
 
 export const UserServices = {
-    createUserIntoDB
+    createUserIntoDB, getUsersFromDB
 }

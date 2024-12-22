@@ -7,34 +7,31 @@ import config from '../config';
 import { TUserRole } from '../modules/User/user_interface';
 
 
-const auth = (...requiredRoles: TUserRole[]) => {
-  return catchAsync(
-    async (req: Request, res: Response, next: NextFunction) => {
-      
-      const token = req.headers.authorization;
+const auth = (requiredRoles: TUserRole[]) => {
+  return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const token = req.headers.authorization;
 
-      if (!token) {
+    if (!token) {
+      throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized!');
+    }
+
+    jwt.verify(token, config.jwt_secret as string, function (err, decoded) {
+      if (err) {
         throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized!');
       }
 
-      jwt.verify(token, config.jwt_secret as string, function (err, decoded) {
-        if(err) {
-          throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized!');
-        }
+      const role = (decoded as JwtPayload).role;
 
-        const role = (decoded as JwtPayload).role
+      // Check if the user's role is included in the required roles
+      if (requiredRoles.length > 0 && !requiredRoles.includes(role)) {
+        throw new AppError(httpStatus.FORBIDDEN, 'Forbidden: You do not have access to this resource.');
+      }
 
-        if (requiredRoles && requiredRoles.includes(role)) {
-          throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized!');
-        }
+      req.user = decoded as JwtPayload;
 
-        req.user = decoded as JwtPayload;
-
-        next();
-      });
-
-    }
-  );
+      next();
+    });
+  });
 };
 
 export default auth;

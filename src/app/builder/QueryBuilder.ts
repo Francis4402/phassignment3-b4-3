@@ -1,13 +1,6 @@
-import { FilterQuery, Query, Document } from 'mongoose';
+import { Query, Document, Types } from 'mongoose';
+import { QueryParams } from './QueryInterface';
 
-interface QueryParams {
-  search?: string;
-  sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
-  limit?: number;
-  page?: number;
-  [key: string]: any; // Allow any additional query params for filtering
-}
 
 class QueryBuilder<T extends Document> {
   public modelQuery: Query<T[], T>;
@@ -20,27 +13,27 @@ class QueryBuilder<T extends Document> {
 
   // Search functionality: Searches over specified fields
   search(searchableFields: string[]) {
-    const search = this.query.search;
+    const { search } = this.query;
     if (search) {
       const searchConditions = searchableFields.map((field) => ({
-        [field]: { $regex: search, $options: 'i' },
+        [field]: { $regex: search, $options: 'i' }, // Case-insensitive search
       }));
       this.modelQuery = this.modelQuery.find({ $or: searchConditions });
     }
-
     return this;
   }
 
   // Filter functionality: Applies additional filters (e.g., author=authorId)
   filter() {
-    const queryObj: Record<string, any> = { ...this.query }; // copy
+    const { filter } = this.query;
 
-    // Filtering: Exclude special query parameters like search, sort, limit, etc.
-    const excludeFields = ['search', 'sortBy', 'sortOrder', 'limit', 'page'];
-    excludeFields.forEach((el) => delete queryObj[el]);
-
-    if (Object.keys(queryObj).length > 0) {
-      this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>);
+    if (filter) {
+      try {
+        const authorId = Types.ObjectId.createFromHexString(filter); // Convert filter to ObjectId
+        this.modelQuery = this.modelQuery.find({ author: authorId });
+      } catch (err) {
+        console.error('Invalid ObjectId for filter:', filter);
+      }
     }
 
     return this;
@@ -48,11 +41,15 @@ class QueryBuilder<T extends Document> {
 
   // Sorting functionality: Sorts the results based on sortBy and sortOrder
   sort() {
-    const sortBy = this.query.sortBy || 'createdAt';
-    const sortOrder = this.query.sortOrder === 'asc' ? 1 : -1;
+    const sortBy = this.query.sortBy || 'createdAt'; // Default sort field
+    const sortOrder = this.query.sortOrder === 'asc' ? 1 : -1; // Default to descending
     this.modelQuery = this.modelQuery.sort({ [sortBy]: sortOrder });
-
     return this;
+  }
+
+
+  build() {
+    return this.modelQuery;
   }
 }
 

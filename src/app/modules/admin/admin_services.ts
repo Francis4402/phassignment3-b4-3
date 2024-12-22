@@ -3,6 +3,23 @@ import { User } from "../User/user_model";
 import { Blog } from "../blogs/blog_model";
 
 
+const updateUserRolesDB = async (id: string) => {
+    try {
+        const objectId = new Types.ObjectId(id);
+
+        const result = await User.updateOne(
+            {_id: objectId},
+            {$set: {role: 'admin'}}
+        );
+
+        return result;
+
+    } catch (error) {
+        console.error("Error changing user role:", error);
+        throw new Error("Failed to change user role");
+    }
+}
+
 const updateUserBlockedFromDB = async (id: string) => {
     try {
         const objectId = new Types.ObjectId(id);
@@ -34,5 +51,5 @@ const deleteBlogIntoDB = async (id: string) => {
 
 
 export const adminServices = {
-    updateUserBlockedFromDB, deleteBlogIntoDB
+    updateUserBlockedFromDB, deleteBlogIntoDB, updateUserRolesDB
 }

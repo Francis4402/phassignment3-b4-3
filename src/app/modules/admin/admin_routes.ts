@@ -7,8 +7,10 @@ import { BlogValidation } from '../blogs/blog_validation';
 
 const router = express.Router();
 
-router.patch('/users/:id/block', auth(USER_ROLE.user), AdminController.updateUserBlocked);
+router.patch('/users/:id/block', auth([USER_ROLE.admin]), AdminController.updateUserBlocked);
 
-router.delete('/blogs/:id', auth(USER_ROLE.user), validateRequest(BlogValidation.blogValidationSchema), AdminController.deleteBlog);
+router.delete('/blogs/:id', auth([USER_ROLE.admin]), validateRequest(BlogValidation.blogValidationSchema), AdminController.deleteBlog);
+
+router.patch('/users/:id/admin', auth([USER_ROLE.user]), AdminController.updateUserRoles);
 
 export const AdminRoutes = router;
