@@ -15,7 +15,7 @@ npm install
 ```bash
 setup the .env 
 
-NODE_ENV = development
+NODE_ENV = production
 PORT = 5000
 DATABSE_URL = mongodb url
 
@@ -24,7 +24,7 @@ DATABSE_URL = mongodb url
 
 ## Description
 
-In this project you can login and register as user or admin. User can post blog, get blog, update, and delete blog. Admin can also post blog and update and can blog other users and aslo can delete any blog. You can search blog by filter title sort .
+In this project you can login and register as user or admin. User can post blog, get blog, update, and delete blog. Admin can also post blog and update and can blog other users and aslo can delete any blog. You can filter blog by title sortby sortOrder and filter by authorId. admin can block user and also make make any user as admin.
 
 ## Features
 
@@ -44,7 +44,6 @@ In this project you can login and register as user or admin. User can post blog,
 ```bash
 /api/blogs
 ```
-
 
 ### Get a Specific Blog , update and delete
 
@@ -72,6 +71,13 @@ In this project you can login and register as user or admin. User can post blog,
 ### For the Admin Delete Blog
 ```bash
 /api/admin/blogs/:id
+```
+
+## Admin Can make any user as admin
+```bash
+
+/api/admin/users/:id/admin
+
 ```
 
 ---
