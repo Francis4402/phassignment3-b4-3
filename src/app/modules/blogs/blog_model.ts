@@ -10,7 +10,6 @@ const BlogSchema = new Schema<TBlogs>({
     content: {
         type: String,
         required: true,
-        unique: true,
     },
     author: {
         type: Schema.Types.ObjectId,
