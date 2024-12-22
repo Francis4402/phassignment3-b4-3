@@ -5,6 +5,19 @@ import { blogServices } from "../blogs/blog_services";
 import { adminServices } from "./admin_services";
 
 
+const unpublishBlog = catchAsync(async (req, res) => {
+    const {id} = req.params;
+
+    const result = await adminServices.updateBlogUnpublishDB(id);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Blog is unpublished successfully',
+        data: result,
+    })
+})
+
 const updateUserRoles = catchAsync(async (req, res) => {
     const {id} = req.params;
     
@@ -45,5 +58,5 @@ const deleteBlog = catchAsync(async (req, res) => {
 });
 
 export const AdminController = {
-    updateUserBlocked, deleteBlog, updateUserRoles
+    updateUserBlocked, deleteBlog, updateUserRoles, unpublishBlog
 }

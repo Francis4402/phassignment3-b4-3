@@ -24,7 +24,7 @@ DATABSE_URL = mongodb url
 
 ## Description
 
-In this project you can login and register as user or admin. User can post blog, get blog, update, and delete blog. Admin can also post blog and update and can blog other users and aslo can delete any blog. You can filter blog by title sortby sortOrder and filter by authorId. admin can block user and also make make any user as admin.
+In this project you can login and register as user or admin. User can post blog, get blog, update, and delete blog. Admin can also post blog and update and can delete any blog. You can filter blog by title sortby sortOrder and filter by authorId. admin can block user and also make any user as admin. If admin block any user that user won't be able to login. Admin can unpublish blog. If admin unpublish blog then it will not be visible to other users. 
 
 ## Features
 
@@ -77,6 +77,13 @@ In this project you can login and register as user or admin. User can post blog,
 ```bash
 
 /api/admin/users/:id/admin
+
+```
+
+## Admin can unpublish blog
+```bash
+
+/api/admin/blogs/:id/unpublish
 
 ```
 

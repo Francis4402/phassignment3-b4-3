@@ -15,7 +15,8 @@ const createBlogIntoDB = async (payload: TBlogs) => {
 }
 
 const getAllBlogsFromDB = async (queryParams: QueryParams) => {
-    const queryBuilder = new QueryBuilder(Blog.find(), queryParams);
+
+    const queryBuilder = new QueryBuilder(Blog.find({ isPublished: true }), queryParams);
 
   const result = await queryBuilder
     .search(['title', 'content'])

@@ -13,4 +13,6 @@ router.delete('/blogs/:id', auth([USER_ROLE.admin]), validateRequest(BlogValidat
 
 router.patch('/users/:id/admin', auth([USER_ROLE.admin]), AdminController.updateUserRoles);
 
+router.patch('/blogs/:id/unpublish', auth([USER_ROLE.admin]), AdminController.unpublishBlog);
+
 export const AdminRoutes = router;
