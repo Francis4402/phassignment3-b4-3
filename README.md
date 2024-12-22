@@ -73,14 +73,14 @@ In this project you can login and register as user or admin. User can post blog,
 /api/admin/blogs/:id
 ```
 
-## Admin Can make any user as admin
+### Admin Can make any user as admin
 ```bash
 
 /api/admin/users/:id/admin
 
 ```
 
-## Admin can unpublish blog
+### Admin can unpublish blog
 ```bash
 
 /api/admin/blogs/:id/unpublish
