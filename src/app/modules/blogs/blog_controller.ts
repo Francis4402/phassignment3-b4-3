@@ -14,7 +14,7 @@ const createBlogs = catchAsync(async (req, res) => {
     const result = await blogServices.createBlogIntoDB(payload);
 
     sendResponse(res, {
-        statusCode: httpStatus.OK,
+        statusCode: httpStatus.SUCCESS,
         success: true,
         message: 'Blog is created successfully',
         data: result,
@@ -27,7 +27,7 @@ const getAllBlogs = catchAsync(async (req, res) => {
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: 'Blogs are fetched successfully',
+        message: 'Blogs fetched successfully',
         data: result,
     })
 });
@@ -40,7 +40,7 @@ const getSingleBlog = catchAsync(async (req, res) => {
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: 'Blog is fetched successfully',
+        message: 'Blog fetched successfully',
         data: result,
     })
 });
@@ -58,7 +58,7 @@ const updateBlog = catchAsync(async (req, res) => {
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: 'Blog is updated successfully',
+        message: 'Blog updated successfully',
         data: result,
     })
 });
@@ -71,7 +71,7 @@ const deleteBlog = catchAsync(async (req, res) => {
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: 'Blog is deleted successfully',
+        message: 'Blog deleted successfully',
         data: result,
     })
 });

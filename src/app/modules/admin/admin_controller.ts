@@ -39,7 +39,7 @@ const updateUserBlocked = catchAsync(async (req, res) => {
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: 'User is blocked successfully',
+        message: 'User blocked successfully',
         data: result,
     })
 });
@@ -52,7 +52,7 @@ const deleteBlog = catchAsync(async (req, res) => {
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: 'Blog is deleted successfully',
+        message: 'Blog deleted successfully',
         data: result,
     })
 });

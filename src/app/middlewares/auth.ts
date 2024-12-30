@@ -1,4 +1,3 @@
-import { NextFunction, Request, Response } from 'express';
 import catchAsync from '../utils/catchAsync';
 import AppError from '../errors/AppError';
 import { httpStatus } from '../config/status';
@@ -8,7 +7,7 @@ import { TUserRole } from '../modules/User/user_interface';
 
 
 const auth = (requiredRoles: TUserRole[]) => {
-  return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  return catchAsync(async (req, res, next) => {
     const token = req.headers.authorization;
 
     if (!token) {

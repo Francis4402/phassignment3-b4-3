@@ -9,7 +9,9 @@ const router = express.Router();
 
 router.post('/', auth([USER_ROLE.user, USER_ROLE.admin]), validateRequest(BlogValidation.blogValidationSchema), BlogController.createBlogs);
 
-router.get('/', auth([USER_ROLE.user, USER_ROLE.admin]), validateRequest(BlogValidation.blogValidationSchema), BlogController.getAllBlogs);
+router.get('/', auth([USER_ROLE.user, USER_ROLE.admin]), BlogController.getAllBlogs);
+
+router.get('/:id', auth([USER_ROLE.user, USER_ROLE.admin]), BlogController.getSingleBlog);
 
 router.patch('/:id', auth([USER_ROLE.user]), validateRequest(BlogValidation.blogValidationSchema), BlogController.updateBlog);
 
